@@ -92,6 +92,20 @@ impl CcyNtry<'_> {
     pub fn ccy_mnr_unts(&self) -> Option<i32> {
         self.ccy_mnr_unts
     }
+
+    /// Converts the internal [`Cow`] instances into Owned.
+    pub fn into_owned(self) -> CcyNtry<'static> {
+        CcyNtry {
+            ctry_nm: Cow::Owned(self.ctry_nm.into_owned()),
+            ccy_nm: CcyNm {
+                content: Cow::Owned(self.ccy_nm.content.into_owned()),
+                is_fund: self.ccy_nm.is_fund,
+            },
+            ccy: self.ccy.map(|t| Cow::Owned(t.into_owned())),
+            ccy_nbr: self.ccy_nbr.map(|t| Cow::Owned(t.into_owned())),
+            ccy_mnr_unts: self.ccy_mnr_unts,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
